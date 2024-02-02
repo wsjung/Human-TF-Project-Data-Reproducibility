@@ -67,4 +67,5 @@ I downloaded the accessions in `see/ENCODE/file_download_metadata_lamberts.tsv`
 which contain accessions that meet the criteria: CRISPRi RNA-seq, shRNA RNA-seq,
 siRNA RNA-seq with replicates for K562 or HepG2 homo sapiens biosamples.
 
-
+## Dealing with Motif Overlaps
+see `scripts/motif_overlaps`
