@@ -69,3 +69,6 @@ siRNA RNA-seq with replicates for K562 or HepG2 homo sapiens biosamples.
 
 ## Dealing with Motif Overlaps
 see `scripts/motif_overlaps`
+
+## Connecting TF Motifs to Promoters
+see `scripts/motif_to_promoter`
