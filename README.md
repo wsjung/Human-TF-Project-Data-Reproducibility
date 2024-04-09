@@ -72,3 +72,6 @@ see `scripts/motif_overlaps`
 
 ## Connecting TF Motifs to Promoters
 see `scripts/motif_to_promoter`
+
+## Creating TF to TG Matrices
+see `scripts/tf_to_tg`
