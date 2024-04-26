@@ -9,11 +9,10 @@ parser.add_argument("--index", required=True, help="index corresponding to which
 parser.add_argument("--output_path", required=True, help="path to output tf_tg score matrices")
 args = parser.parse_args()
 
-#sample_files = glob.glob(args.input_scores_path + '/*.txt')
 scores_df_first_sample = pd.read_csv(os.path.join(args.input_scores_path, "0007.add_tf_tg_scores.txt"), sep="\t", comment="#")
-unique_tf_names = scores_df_first_sample.tf_id.unique()
-unique_hgnc_ids = scores_df_first_sample.hgnc_id.unique()
-zeros_matrix = np.zeros((len(unique_hgnc_ids),len(unique_tf_names)))
+unique_tf_ensg_ids = scores_df_first_sample.tf_ensg_id.unique()
+unique_tg_ensg_ids = scores_df_first_sample.tg_ensg_id.unique()
+zeros_matrix = np.zeros((len(unique_tf_ensg_ids),len(unique_tg_ensg_ids)))
 
 i =  int(args.index)*10 + 7
 stop = int(args.index)*10 + 17
@@ -21,14 +20,14 @@ stop_final = 1836
 
 def add_to_matrix(row):
     tf_tg_score = row["tf_tg_score"]
-    hgnc_id = row["hgnc_id"]
-    tf_id = row["tf_id"]
-    if(tf_tg_score > matrix_df.loc[hgnc_id, tf_id]):
-        matrix_df.loc[hgnc_id, tf_id] = tf_tg_score
+    tf_ensg_id = row["tf_ensg_id"]
+    tg_ensg_id = row["tg_ensg_id"]
+    if(tf_tg_score > matrix_df.loc[tf_ensg_id, tg_ensg_id]):
+        matrix_df.loc[tf_ensg_id, tg_ensg_id] = tf_tg_score
 
 while((i < stop) and i < (stop_final)):
     scores_df = pd.read_csv(os.path.join(args.input_scores_path, f"{i:04d}.add_tf_tg_scores.txt"), sep="\t", comment="#")
-    matrix_df = pd.DataFrame(zeros_matrix, columns = unique_tf_names, index = unique_hgnc_ids)
+    matrix_df = pd.DataFrame(zeros_matrix, columns = unique_tg_ensg_ids, index = unique_tf_ensg_ids)
     scores_df.apply(add_to_matrix, axis=1)
     matrix_df.to_csv(os.path.join(args.output_path, f"{i:04d}.create_tf_tg_matrices.txt"), sep="\t", index=True)
     print(i)

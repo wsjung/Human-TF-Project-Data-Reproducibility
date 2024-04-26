@@ -14,7 +14,7 @@ activity_levels_df = pd.read_csv(args.activity_levels_first_row_path, sep="\t", 
 i = 7
 stop = activity_levels_df.shape[1]
 while(i < stop):
-    shutil.copyfile(os.path.join(args.output_with_sample_numbers_path, f"{i:04d}.create_tf_tg_matrices.txt"), os.path.join(args.output_path, f"{activity_levels_df.iloc[0,i]}.create_tf_tg_matrices.txt"))
+    shutil.copyfile(os.path.join(args.output_with_sample_numbers_path, f"{i:04d}.create_tf_tg_matrices.txt"), os.path.join(args.output_path, f"{activity_levels_df.iloc[0,i]}"))
     print(i)
     i = i + 1
 
