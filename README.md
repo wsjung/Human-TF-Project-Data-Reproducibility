@@ -74,4 +74,8 @@ see `scripts/motif_overlaps`
 see `scripts/motif_to_promoter`
 
 ## Creating TF to TG Matrices
-see `scripts/tf_to_tg`
+For TF->TG matrices based on FANTOM5, see `scripts/tf_to_tg`.
+For TF->TG matrices based on EnhancerAtlas, see `scripts/tf_to_tg_matrix_enhanceratlas`.
+
+## Creating Binding labels based on REMAP 2020 peaks
+see `scripts/remap_labels`
