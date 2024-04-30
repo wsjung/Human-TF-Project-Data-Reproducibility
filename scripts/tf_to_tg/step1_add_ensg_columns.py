@@ -30,10 +30,11 @@ tfs_without_ensg_id = []
 
 def get_ensg_ids(promoter_scores_row):
     # Add tf_ensg_id column based on mapping for tf id
-    tf_id = promoter_scores_row['tf_id']
-    tf_ensg_id_row = lambert_tfs_ensg_mapping_df.loc[lambert_tfs_ensg_mapping_df['gene_name'] == tf_id]
+    promoter_scores_row['tf_id_upper'] = promoter_scores_row['tf_id'].upper()
+    tf_id_upper = promoter_scores_row['tf_id_upper']
+    tf_ensg_id_row = lambert_tfs_ensg_mapping_df.loc[lambert_tfs_ensg_mapping_df['gene_name'] == tf_id_upper]
     if tf_ensg_id_row.shape[0] == 0:
-        tfs_without_ensg_id.append(tf_id)
+        tfs_without_ensg_id.append(tf_id_upper)
         return
     if tf_ensg_id_row.shape[0] > 1:
         raise Exception("only one ENSG ID should be associated with the tf")
