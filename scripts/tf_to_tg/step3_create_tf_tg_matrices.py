@@ -10,8 +10,8 @@ parser.add_argument("--output_path", required=True, help="path to output tf_tg s
 args = parser.parse_args()
 
 scores_df_first_sample = pd.read_csv(os.path.join(args.input_scores_path, "0007.add_tf_tg_scores.txt"), sep="\t", comment="#")
-unique_tf_ensg_ids = scores_df_first_sample.tf_ensg_id.unique()
-unique_tg_ensg_ids = scores_df_first_sample.tg_ensg_id.unique()
+unique_tf_ensg_ids = np.sort(scores_df_first_sample.tf_ensg_id.unique()) # Note: sorting helps make graph union easier later on
+unique_tg_ensg_ids = np.sort(scores_df_first_sample.tg_ensg_id.unique()) # Note: sorting helps make graph union easier later on
 zeros_matrix = np.zeros((len(unique_tf_ensg_ids),len(unique_tg_ensg_ids)))
 
 i =  int(args.index)*10 + 7
