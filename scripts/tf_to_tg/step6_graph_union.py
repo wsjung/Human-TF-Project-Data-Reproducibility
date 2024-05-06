@@ -11,7 +11,7 @@ parser.add_argument("--output_path", required=True, help="path to output matrice
 args = parser.parse_args()
 
 # Grab the sample matrices corresponding to the tissue (their file name contains the tissue name as a prefix)
-tissue_samples = [filename for filename in os.listdir(args.sample_matrices_path) if filename.startswith(args.tissue)]
+tissue_samples = [filename for filename in os.listdir(args.sample_matrices_path) if filename.startswith(f"{args.tissue}_")]
 print(f'Number of {args.tissue} samples: {len(tissue_samples)}')
 
 # Read and concat the samples
@@ -23,6 +23,6 @@ union_df = sample_dfs.groupby(level=0).max()
 # Replace all special characters including whitespaces with underscores
 gtex_tissue_underscore = re.sub(r'[^\w.]', '_', args.tissue)
 
-union_df.to_csv(os.path.join(args.output_path, gtex_tissue_underscore), sep="\t", index=True)
+union_df.to_csv(os.path.join(args.output_path, f"{gtex_tissue_underscore}.txt"), sep="\t", index=True)
 
 print("done")
