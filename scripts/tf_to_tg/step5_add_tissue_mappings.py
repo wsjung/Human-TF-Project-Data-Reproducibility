@@ -22,10 +22,11 @@ for sample_name in os.listdir(args.output_with_sample_names_path):
     tissue = fantom5_tissue_mapping_dict[sample_name][0]
     # If tissue mapping isn't na:
     if(not pd.isna(tissue)):
-        # Save the file with the tissue mapping now appended to the start of the file
-        shutil.copyfile(os.path.join(args.output_with_sample_names_path, sample_name), os.path.join(args.output_path, f"{tissue}_{sample_name}"))
-        # Keep track of how many samples were mapped to a tissue correctly
-        i = i + 1
-        print(i)
+        for t in tissue.split(";"):
+            # Save the file with the tissue mapping now appended to the start of the file
+            shutil.copyfile(os.path.join(args.output_with_sample_names_path, sample_name), os.path.join(args.output_path, f"{t}_{sample_name}"))
+            # Keep track of how many samples were mapped to a tissue correctly
+            i = i + 1
+            print(i)
 
 print("done")
