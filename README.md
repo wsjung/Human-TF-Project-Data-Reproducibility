@@ -75,7 +75,14 @@ see `scripts/motif_to_promoter`
 
 ## Creating TF to TG Matrices
 For TF->TG matrices based on FANTOM5, see `scripts/tf_to_tg`.
+
 For TF->TG matrices based on EnhancerAtlas, see `scripts/tf_to_tg_matrix_enhanceratlas`.
 
 ## Creating Binding labels based on REMAP 2020 peaks
 see `scripts/remap_labels`
+
+## NP3 evaluation scripts
+see `scripts/evaluation/` for evaluation scripts of the NP3 network and its input feature networks.
+
+Note: NP3 evaluation scripts are based on
+[NET-evaluation](https://github.com/BrentLab/NET-evaluation).
