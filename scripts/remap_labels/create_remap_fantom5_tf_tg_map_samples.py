@@ -13,8 +13,8 @@ parser.add_argument("--output_dir", required=True, help="output directory")
 args = parser.parse_args()
 
 OUTPUT_DIR = os.path.join(args.output_dir, "tissues")
-OUTPUT_DIR_GENCODE_ID_ZERO_FILTER = os.path.join(args.output_DIR, "tissues_tf_gencode") # TFs with gene_id and no filtering
-OUTPUT_DIR_GENCODE_ID_75_FILTER = os.path.join(args.output_DIR, "tissues_tf_gencode_75percentile") # TFs with gene_id and edges filtered for top 25 percentile
+OUTPUT_DIR_GENCODE_ID_ZERO_FILTER = os.path.join(args.output_dir, "tissues_tf_gencode") # TFs with gene_id and no filtering
+OUTPUT_DIR_GENCODE_ID_75_FILTER = os.path.join(args.output_dir, "tissues_tf_gencode_75percentile") # TFs with gene_id and edges filtered for top 25 percentile
 
 # load gene name mapping
 df_gencode29_protein_coding_genes = pd.read_csv(args.gencode_protein, sep="\t")
@@ -40,7 +40,7 @@ print(f"{len(fantom5_samples)} unique FANTOM5 samples")
 print(f"{len(gtex_tissues)} unique GTEx tissues")
 
 # for each gtex tissue
-for gtex_tissue in gtex_tissues[-1:]:
+for gtex_tissue in gtex_tissues:
     print(f"##########\n### GTEx tissue: {gtex_tissue}\n##########")
 
     # replace special chars with underscores
@@ -64,32 +64,38 @@ for gtex_tissue in gtex_tissues[-1:]:
 
     print("filtering")
     # sum activity levels across samples
-    ## only keep TF-TG pairs where sum of normalized activity > 0
     df_tf_to_gene['sum'] = df_tf_to_gene[gtex_tissue_samples].sum(axis=1)
+
+    # TF to gencode mapping
+    print("mapping TFs to gencode gene_id")
+    df_tf_to_gene['TF_gene_id'] = df_tf_to_gene['TF'].str.upper().map(df_gencode29_dict)
+    num_TFs_lost = df_tf_to_gene['TF'].nunique() - df_tf_to_gene['TF_gene_id'].nunique()
+    print(f"> lost {num_TFs_lost} TFs")
+
+    ## only keep TF-TG pairs where sum of normalized activity > 0
     df_tf_to_gene_zero_filtering = df_tf_to_gene[df_tf_to_gene['sum'] > 0]
 
-    ## TODO: normalized activity filtering based on percentile to reduce number of positive labels
     ## only keep TF-TG pairs where sum of norm activity >= 75 percentile
     _75_percentile_filtering_threshold = df_tf_to_gene['sum'].quantile(.75)
     df_tf_to_gene_75_filtering = df_tf_to_gene[df_tf_to_gene['sum'] > _75_percentile_filtering_threshold]
 
     # only write TF and TG (zero filtering)
-    df_tf_to_gene_zero_filtering = df_tf_to_gene_zero_filtering[['TF','gene_id']].drop_duplicates()
-    df_tf_to_gene_zero_filtering = df_tf_to_gene_zero_filtering.rename(columns={'TF':'regulator','gene_id':'target'})
+    df_tf_to_gene_zero_filtering = df_tf_to_gene_zero_filtering[['TF_gene_id','gene_id']].drop_duplicates()
+    df_tf_to_gene_zero_filtering = df_tf_to_gene_zero_filtering.rename(columns={'TF_gene_id':'regulator','gene_id':'target'})
 
     # only write TF and TG (75% filtering)
-    df_tf_to_gene_75_filtering = df_tf_to_gene_75_filtering[['TF','gene_id']].drop_duplicates()
-    df_tf_to_gene_75_filtering = df_tf_to_gene_75_filtering.rename(columns={'TF':'regulator','gene_id':'target'})
+    df_tf_to_gene_75_filtering = df_tf_to_gene_75_filtering[['TF_gene_id','gene_id']].drop_duplicates()
+    df_tf_to_gene_75_filtering = df_tf_to_gene_75_filtering.rename(columns={'TF_gene_id':'regulator','gene_id':'target'})
 
     print("mapping gene names to gene_ids")
     # map TF to gene_id (zero filtering)
     df_tf_to_gene_zero_filtering_ensg = df_tf_to_gene_zero_filtering
-    df_tf_to_gene_zero_filtering_ensg['regulator'] = df_tf_to_gene_zero_filtering['regulator'].map(df_gencode29_dict)
+    #df_tf_to_gene_zero_filtering_ensg['regulator'] = df_tf_to_gene_zero_filtering['regulator'].str.upper()map(df_gencode29_dict)
     df_tf_to_gene_zero_filtering_ensg = df_tf_to_gene_zero_filtering_ensg.dropna()
 
     # map TF to gene_id (75% filtering)
     df_tf_to_gene_75_filtering_ensg = df_tf_to_gene_75_filtering
-    df_tf_to_gene_75_filtering_ensg['regulator'] = df_tf_to_gene_75_filtering['regulator'].map(df_gencode29_dict)
+    #df_tf_to_gene_75_filtering_ensg['regulator'] = df_tf_to_gene_75_filtering['regulator'].str.upper().map(df_gencode29_dict)
     df_tf_to_gene_75_filtering_ensg = df_tf_to_gene_75_filtering_ensg.dropna()
 
     print("writing to disk")

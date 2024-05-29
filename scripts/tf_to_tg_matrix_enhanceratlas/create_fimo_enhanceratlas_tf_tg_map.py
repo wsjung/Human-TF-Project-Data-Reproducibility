@@ -7,7 +7,6 @@ import argparse
 
 parser = argparse.ArgumentParser(description="creates TF->TG matrix based on enhanceratlas FIMO scores")
 parser.add_argument("--gtex_mapping", required=True, help="GTEx tissue mapping file for fantom5 samples")
-parser.add_argument("--ea_gencode_mapping", required=True, help="mapping file for enhanceratlas genes to gencode gene_id")
 parser.add_argument("--ea_name_mapping", required=True, help="mapping file for enhanceratlas hg19 and hg38 names")
 parser.add_argument("--gencode_id_mapping", required=True, help="mapping file between gencode protein-coding gene name, IDs")
 parser.add_argument("--fimo", required=True, help="normalized fimo scores")
@@ -19,7 +18,6 @@ args = parser.parse_args()
 
 # mapping files
 df_GTEx_mapping = pd.read_csv(args.gtex_mapping, sep="\t")
-df_ge_gencode_mapping = pd.read_csv(args.ea_gencode_mapping, sep="\t")
 df_sequence_name_mapping = pd.read_csv(args.ea_name_mapping, header=None, names=['sequence_name_hg19','sequence_name_hg38'])
 df_gencode29_protein_coding_genes = pd.read_csv(args.gencode_id_mapping, sep="\t")
 df_gencode29_dict = {row['gene_name']:row['gene_id'] for _,row in df_gencode29_protein_coding_genes.iterrows()}
@@ -39,10 +37,11 @@ df_fimo_all = df_fimo_all.merge(df_sequence_name_mapping, on='sequence_name_hg38
 
 # map gene interaction genes to gencode ENSG ids
 ## use gene_id
-df_ge_all = df_ge_all.merge(df_ge_gencode_mapping, left_on='gene_ensg', right_on='ENSG_ID_enhanceratlas', how='inner')
+df_ge_all = df_ge_all.merge(df_gencode29_protein_coding_genes, left_on='gene_ensg', right_on='ENSG_ID_enhanceratlas', how='inner')
 
 # create an empty df of all TFxTG pairs
 tfs_all = set(df_fimo_all['motif_alt_id'])
+print(f"### {len(tfs_all)} total TFs")
 genes_all = set(df_gencode29_protein_coding_genes['gene_id'])
 df_zero_edges = pd.DataFrame(list(itertools.product(tfs_all,genes_all)), columns=['motif_alt_id','gene_id'])
 df_zero_edges['tf_tg_score'] = 0
@@ -101,11 +100,16 @@ for gtex_tissue in gtex_tissues:
     # convert tf name to gene_id
     df_tissue['motif_alt_id'] = df_tissue['motif_alt_id'].str.upper()
     df_tissue['motif_alt_id_gene_id'] = df_tissue['motif_alt_id'].map(df_gencode29_dict)
+    ## number of TFs lost to mapping:
+    #print(f"tfs lost to mapping: {df_tissue[df_tissue['motif_alt_id_gene_id'].isna()]['motif_alt_id'].unique()}")
+
+    # add in TFs with 0 scores
+
 
     # long to wide
-    df_tissue_wide = df_tissue.pivot(index='gene_id', columns='motif_alt_id', values='tf_tg_score')
+    df_tissue_wide = df_tissue.pivot(columns='gene_id', index='motif_alt_id', values='tf_tg_score')
     # long to wide (tfs with gencode29 gene_id)
-    df_tissue_wide_tf_gencode_id = df_tissue.pivot(index='gene_id', columns='motif_alt_id_gene_id', values='tf_tg_score')
+    df_tissue_wide_tf_gencode_id = df_tissue.pivot(columns='gene_id', index='motif_alt_id_gene_id', values='tf_tg_score')
 
     # write to disk
     df_tissue_wide.to_csv(os.path.join(args.output_dir, f"{gtex_tissue_underscore}.txt"), sep="\t", index=True)

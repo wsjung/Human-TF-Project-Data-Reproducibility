@@ -13,6 +13,7 @@ parser.add_argument("--gencode_protein", required=True, help="gencode protein co
 parser.add_argument("--gene_interactions", required=True, help="enhanceratlas gene interactions (normalized)")
 parser.add_argument("--REMAP_directory", required=True, help="directory containing REMAP TF peaks to enhanceratlas regions named by celltype")
 parser.add_argument("--output_dir", required=True, help="output directory")
+args = parser.parse_args()
 
 
 OUTPUT_DIR = os.path.join(args.output_dir, "tissues")
@@ -90,6 +91,12 @@ for gtex_tissue in gtex_tissues:
     df_tissue['TF'] = df_tissue['TF'].str.upper()
     df_tissue['TF_gene_id'] = df_tissue['TF'].map(df_gencode29_dict)
 
+    ## number of TFs lost from mapping to gencode IDs
+    lost_TFs = df_tissue[df_tissue['TF_gene_id'].isna()]['TF'].unique()
+    num_TFs_lost = df_tissue['TF'].nunique() - df_tissue['TF_gene_id'].nunique()
+    num_edges_lost = len(df_tissue) - len(df_tissue.dropna(subset=['TF_gene_id']))
+    print(f"> lost {num_TFs_lost} TFs ({num_edges_lost})")
+    print(f">> {lost_TFs}")
 
     # write to disk
     df_tissue_tf_hgnc = df_tissue[['TF','gene_id']].rename(columns={'TF':'regulator','gene_id':'target'})
@@ -97,6 +104,7 @@ for gtex_tissue in gtex_tissues:
 
     # write to disk (tfs with gencode29 gene_id)
     df_tissue_tf_gencode_id = df_tissue[['TF_gene_id','gene_id']].rename(columns={'TF_gene_id':'regulator', 'gene_id':'target'})
+    df_tissue_tf_gencode_id = df_tissue_tf_gencode_id.dropna()
     df_tissue_tf_gencode_id.to_csv(os.path.join(OUTPUT_DIR_GENCODE_ID, f"{gtex_tissue_underscore}.txt"), sep="\t", index=False)
 
 
