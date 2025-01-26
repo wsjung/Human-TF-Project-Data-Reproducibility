@@ -86,3 +86,12 @@ see `scripts/evaluation/` for evaluation scripts of the NP3 network and its inpu
 
 Note: NP3 evaluation scripts are based on
 [NET-evaluation](https://github.com/BrentLab/NET-evaluation).
+
+## Running BART
+see `scripts/bart`
+
+## Running GENIE3
+see `scripts/genie3`
+
+## Running WGCNA
+see `scripts/wgcna`
