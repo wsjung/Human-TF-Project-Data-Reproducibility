@@ -98,3 +98,9 @@ see `scripts/genie3`
 
 ## Running WGCNA
 see `scripts/wgcna`
+
+## Example eQTL evaluation script (36 human networks and tissue-specific eQTL)
+see `scripts/evaluation/eQTL_analysis_original_filtered`
+
+## Example eQTL evaluation script (1 aggregate network and tissue-specific eQTL)
+see `scripts/evaluation/eQTL_analysis_aggregate_filtered`
