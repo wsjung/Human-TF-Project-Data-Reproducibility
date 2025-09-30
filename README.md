@@ -18,6 +18,20 @@ see `data/FANTOM5`
 > transcription in transitioning mammalian
 > cells.Science347,1010-1014(2015).DOI:10.1126/science.1259418 
 
+## Marbach TF networks
+see `data/Marbach`
+> Marbach D, Lamparter D, Quon G, Kellis M, Kutalik Z, Bergmann S:
+> Tissue-specific regulatory circuits reveal variable modular perturbations
+> across complex diseases. Nat Methods 2016, 13(4):366-370.
+> https://doi.org/10.1038/nmeth.3799
+
+## PANDA TF networks
+see `data/PANDA`
+> Sonawane AR, Platig J, Fagny M, Chen C-Y, Paulson JN, Lopes-Ramos CM, DeMeo
+> DL, Quackenbush J, Glass K, Kuijjer ML: Understanding Tissue-Specific Gene
+> Regulation. Cell Reports 2017, 21(4):1077-1088.
+> https://doi.org/10.1016/j.celrep.2017.10.001
+
 ## Dealing with Motif Overlaps
 see `scripts/motif_overlaps`
 
