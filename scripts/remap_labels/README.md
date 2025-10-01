@@ -1,4 +1,12 @@
-# Pipeline for construction of binding labels from REMAP 2020 data
+# REMAP 2020 binding score processing
+=====================================
+
+Scripts for computing binding scores for each TF-TG edge.
+* Note that the actual calculation of binary labels for XGBoost classification
+  modeling can be found in `../metanet_modeling/xgboost_5.py`.
+
+## Steps
+--------
 
 1. Filtering of significant (FDR q<=0.01) binding peaks
     * `filter_sig_qval_peaks_1.py`
