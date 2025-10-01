@@ -16,6 +16,9 @@ a `np3_tpm_tfs.txt` file.
 as rownames and sample IDs as column names.
 * The `np3_tpm_tfs.txt` file is a subset of `np3_tpm.txt` with only the TFs.
 
+Note that the input TPM data have been filtered for lowly expressed genes, as
+per `../expression_filtering`.
+
 
 ## Steps
 --------
