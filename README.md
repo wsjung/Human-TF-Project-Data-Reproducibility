@@ -2,7 +2,9 @@
 This project stores the data, scripts, citation and links which describe the source and transformations on externally
 produced data which is added to the Human TF Network project 
 
-## FANTOM5 CAGE
+## Data
+
+### FANTOM5 CAGE
 see `data/FANTOM5`
 
 [https://fantom.gsc.riken.jp/5/datafiles/reprocessed/hg38_latest/](https://fantom.gsc.riken.jp/5/datafiles/reprocessed/hg38_latest/)
@@ -18,54 +20,53 @@ see `data/FANTOM5`
 > transcription in transitioning mammalian
 > cells.Science347,1010-1014(2015).DOI:10.1126/science.1259418 
 
-## Marbach TF networks
+### Marbach TF networks
 see `data/Marbach`
 > Marbach D, Lamparter D, Quon G, Kellis M, Kutalik Z, Bergmann S:
 > Tissue-specific regulatory circuits reveal variable modular perturbations
 > across complex diseases. Nat Methods 2016, 13(4):366-370.
 > https://doi.org/10.1038/nmeth.3799
 
-## PANDA TF networks
+### PANDA TF networks
 see `data/PANDA`
 > Sonawane AR, Platig J, Fagny M, Chen C-Y, Paulson JN, Lopes-Ramos CM, DeMeo
 > DL, Quackenbush J, Glass K, Kuijjer ML: Understanding Tissue-Specific Gene
 > Regulation. Cell Reports 2017, 21(4):1077-1088.
 > https://doi.org/10.1016/j.celrep.2017.10.001
 
-## Dealing with Motif Overlaps
-see `scripts/motif_overlaps`
+## Scripts
 
-## Connecting TF Motifs to Promoters
-see `scripts/motif_to_promoter`
-
-## Creating TF to TG Matrices
-For TF->TG matrices based on FANTOM5, see `scripts/tf_to_tg`.
-
-For TF->TG matrices based on EnhancerAtlas, see `scripts/tf_to_tg_matrix_enhanceratlas`.
-
-## Creating Binding labels based on REMAP 2020 peaks
+### Processing REMAP 2020 TF ChIP-seq binding scores
 see `scripts/remap_labels`
 
-## NP3 evaluation scripts
-see `scripts/evaluation/` for evaluation scripts of the NP3 network and its input feature networks.
+### Expression filtering
+see `scripts/expression_filtering`
 
-Note: NP3 evaluation scripts are based on
-[NET-evaluation](https://github.com/BrentLab/NET-evaluation).
+### LASSO expression feature construction
+see `scripts/lasso`
 
-## Running BART on tissue-specific data
+### BART expression feature construction
 see `scripts/bart`
 
-## Running BART on concatenated (tissue-agnostic) data
-see `scripts/bart_concat`
+### METANet XGBoost modeling
+> Scripts for preprocessing, modeling, and predictions using XGBoost.
+see `metanet_modeling`
 
-## Running GENIE3
-see `scripts/genie3`
+### Subsetting of PANDA networks
+see `scripts/PANDA_subsetting`
 
-## Running WGCNA
-see `scripts/wgcna`
+### Network quality evaluation scripts
+see `scripts/evaluation/network_quality/` for network quality evaluation
+scripts.
+> GO and GO-directness evaluation were done using
+> [NET-evaluation](https://github.com/BrentLab/NET-evaluation).
 
-## Example eQTL evaluation script (36 human networks and tissue-specific eQTL)
-see `scripts/evaluation/eQTL_analysis_original_filtered`
+### eQTL evaluation script
+see `scripts/evaluation/tissue_specificity`
 
-## Example eQTL evaluation script (1 aggregate network and tissue-specific eQTL)
-see `scripts/evaluation/eQTL_analysis_aggregate_filtered`
+### Interpreting evaluation results
+see `scripts/notebooks` for jupyter notebooks of interpreting evaluation
+results.
+
+### FISHNET application
+see `scripts/fishnet`
