@@ -1,4 +1,4 @@
-# Human-TF-Project-Data-Reproducibility 
+# METANet 
 This project stores the data, scripts, citation and links which describe the source and transformations on externally
 produced data which is added to the Human TF Network project 
 
@@ -59,7 +59,7 @@ see `scripts/PANDA_subsetting`
 see `scripts/evaluation/network_quality/` for network quality evaluation
 scripts.
 > GO and GO-directness evaluation were done using
-> [NET-evaluation](https://github.com/BrentLab/NET-evaluation).
+> [BrentLab/NET-evaluation](https://github.com/BrentLab/NET-evaluation).
 
 ### eQTL evaluation script
 see `scripts/evaluation/tissue_specificity`
